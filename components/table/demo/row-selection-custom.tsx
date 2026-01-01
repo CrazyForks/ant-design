@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Table } from 'antd';
+import { Input, Table } from 'antd';
 import type { TableColumnsType, TableProps } from 'antd';
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 
 interface DataType {
-  key: React.Key;
+  key?: React.Key;
   name: string;
   age: number;
   address: string;
@@ -15,6 +15,11 @@ const columns: TableColumnsType<DataType> = [
   {
     title: 'Name',
     dataIndex: 'name',
+    render: () => (
+      <>
+        <Input />
+      </>
+    ),
   },
   {
     title: 'Age',
@@ -27,7 +32,7 @@ const columns: TableColumnsType<DataType> = [
 ];
 
 const dataSource = Array.from({ length: 46 }).map<DataType>((_, i) => ({
-  key: i,
+  // key: i,
   name: `Edward King ${i}`,
   age: 32,
   address: `London, Park Lane no. ${i}`,
@@ -42,6 +47,7 @@ const App: React.FC = () => {
   };
 
   const rowSelection: TableRowSelection<DataType> = {
+    preserveSelectedRowKeys: true,
     selectedRowKeys,
     onChange: onSelectChange,
     selections: [
@@ -79,7 +85,12 @@ const App: React.FC = () => {
     ],
   };
 
-  return <Table<DataType> rowSelection={rowSelection} columns={columns} dataSource={dataSource} />;
+  return (
+    <div>
+      {JSON.stringify(selectedRowKeys)}
+      <Table<DataType> rowSelection={rowSelection} columns={columns} dataSource={dataSource} />
+    </div>
+  );
 };
 
 export default App;
